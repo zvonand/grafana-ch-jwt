@@ -1,0 +1,32 @@
+issuer: http://localhost:5556
+storage:
+  type: memory
+web:
+  http: 0.0.0.0:5556
+oauth2:
+  skipApprovalScreen: true
+  responseTypes: ["code", "token", "id_token"]
+  allowedScopes:
+    - openid
+    - email
+    - profile
+  alwaysIncludeClaimsInIDToken: true
+enablePasswordDB: true # Enables the password database for staticPasswords
+staticPasswords:
+  - email: "admin@example.com"
+    hash: "$2b$12$p2ebObhjEmFu0f0ouMA/wO.CEzay6SyaC/GwbZjN4Te77KyKWf29a" # bcrypt for 'admin'
+    username: "admin"
+    userID: "1"
+    # groups: not possible here, see https://github.com/dexidp/dex/issues/1080
+    #   - "grafana-admin"
+  - email: "user@example.com"
+    hash: "$2b$12$H6nx7ieV0bx4r9gtmNzNGOYZMmB5Tv2SHvr/dm5F7NHcfREYudNC2" # bcrypt for 'password'
+    username: "user"
+    userID: "2"
+staticClients:
+  - id: grafana-client
+    redirectURIs:
+      - http://localhost:3000/login/generic_oauth
+    name: "Grafana"
+    secret: "grafana-secret"
+

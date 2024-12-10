@@ -1,0 +1,54 @@
+version: "3.8"
+
+services:
+  dex:
+    image: ghcr.io/dexidp/dex:latest
+    ports:
+      - "5556:5556" # Dex API and Authentication endpoints
+    volumes:
+      - ./dex-config.yaml:/etc/dex/config.yaml
+    command: ["dex", "serve", "/etc/dex/config.yaml"]
+
+  clickhouse:
+    image: ${CLICKHOUSE_IMAGE:-altinityinfra/clickhouse-server:540-24.8.8.18.altinitystable}
+    ports:
+      - "8123:8123"
+    volumes:
+      - clickhouse-data:/var/lib/clickhouse
+      - ./clickhouse-low-ram-config.xml:/etc/clickhouse-server/config.d/clickhouse-low-ram-config.xml:ro
+      - ./clickhouse-low-ram-user-profile.xml:/etc/clickhouse-server/users.d/clickhouse-low-ram-user-profile.xml:ro
+    mem_limit: 4000M
+    cpus: 2.0
+
+  grafana:
+    image: ${GRAFANA_IMAGE:-grafana/grafana:latest}
+    ports:
+      - "3000:3000"
+    # volumes:
+      # - ./grafana-config:/etc/grafana/provisioning
+      # - grafana-data:/var/lib/grafana
+    environment:
+      - GF_AUTH_GENERIC_OAUTH_ENABLED=true
+      - GF_AUTH_GENERIC_OAUTH_NAME=OAuth
+      - GF_AUTH_GENERIC_OAUTH_CLIENT_ID=grafana-client
+      - GF_AUTH_GENERIC_OAUTH_CLIENT_SECRET=grafana-secret
+      - GF_AUTH_GENERIC_OAUTH_AUTH_URL=http://localhost:5556/auth
+      - GF_AUTH_GENERIC_OAUTH_TOKEN_URL=http://dex:5556/token
+      - GF_AUTH_GENERIC_OAUTH_API_URL=http://dex:5556/userinfo
+      - GF_AUTH_GENERIC_OAUTH_SCOPES=openid email profile groups
+      - GF_SERVER_ROOT_URL=http://localhost:3000
+      - GF_AUTH_SIGNOUT_REDIRECT_URL=http://localhost:3000
+      #- GF_AUTH_GENERIC_OAUTH_ROLE_ATTRIBUTE_PATH=contains(groups[*], 'grafana-admin') && 'Admin' || 'Viewer'
+      - GF_AUTH_GENERIC_OAUTH_ROLE_ATTRIBUTE_PATH=contains(email, 'admin@example.com') && 'Admin' || contains(email, 'user@example.com') && 'Editor' || 'Viewer'
+      - GF_LOG_LEVEL=debug      
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+        GF_PLUGINS_ALLOW_LOADING_UNSIGNED_PLUGINS=vertamedia-clickhouse-datasource
+      - GF_INSTALL_PLUGINS=https://github.com/Altinity/clickhouse-grafana/releases/download/v3.3.0/vertamedia-clickhouse-datasource-3.3.0.zip;vertamedia-clickhouse-datasource
+    depends_on:
+      - dex
+      - clickhouse
+
+volumes:
+  grafana-data:
+  clickhouse-data:
+
