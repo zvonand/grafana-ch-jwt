@@ -1,6 +1,10 @@
-# grafana-ch-jwt
+## grafana-ch-jwt
 
 Grafana + ClickHouse + kex for signle-sign-on / JWT integration tests. 
+
+#### For now, user shall be pre-defined in clickhouse.
+
+As dex is using some strange `sub`s and they cannot be changed, username looks weird. For other identity providers situation may be different.
 
 1. 
 
@@ -8,9 +12,7 @@ Grafana + ClickHouse + kex for signle-sign-on / JWT integration tests.
 docker-compose up
 ```
 
-2. 
-
-navigate to http://localhost:8123
+2. navigate to http://localhost:3000
 
 3. ![image](https://gist.github.com/user-attachments/assets/6451dd38-f9b8-4bbf-bda4-736628ecff0e)
 
