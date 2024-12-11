@@ -1,0 +1,9 @@
+<clickhouse>
+    <jwt_validators>
+
+        <jwks_server>
+            <uri>http://dex:5556/keys</uri>
+        </jwks_server>
+
+    </jwt_validators>
+</clickhouse>

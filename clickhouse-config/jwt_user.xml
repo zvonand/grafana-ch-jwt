@@ -1,0 +1,14 @@
+<clickhouse>
+    <profiles>
+        <default>
+        </default>
+    </profiles>
+    <users>
+        <ChFhZG1pbkBleGFtcGxlLmNvbRIFbG9jYWw>
+            <jwt>
+            </jwt>
+            <profile>default</profile>
+            <quota>default</quota>
+        </ChFhZG1pbkBleGFtcGxlLmNvbRIFbG9jYWw>
+    </users>
+</clickhouse>
