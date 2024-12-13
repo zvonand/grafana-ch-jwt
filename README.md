@@ -9,7 +9,7 @@ As dex is using some strange `sub`s and they cannot be changed, username looks w
 1. 
 
 ```
-docker-compose up
+docker compose up
 ```
 
 2. navigate to http://localhost:3000
