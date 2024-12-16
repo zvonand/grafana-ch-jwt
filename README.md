@@ -4,7 +4,7 @@ Grafana + ClickHouse + kex for signle-sign-on / JWT integration tests.
 
 #### For now, user shall be pre-defined in clickhouse.
 
-As dex is using some strange `sub`s and they cannot be changed, username looks weird. For other identity providers situation may be different.
+As dex is using some strange `sub` values and they cannot be changed, username looks weird in this demo. For other identity providers situation may be different.
 
 ### How to run
 
