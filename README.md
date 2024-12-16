@@ -6,26 +6,35 @@ Grafana + ClickHouse + kex for signle-sign-on / JWT integration tests.
 
 As dex is using some strange `sub`s and they cannot be changed, username looks weird. For other identity providers situation may be different.
 
+### How to run
+
 1. 
 
 ```
 docker compose up
 ```
 
-2. navigate to http://localhost:3000
+2. In your web browser, go to `http://localhost:3000`
 
-3. ![image](https://gist.github.com/user-attachments/assets/6451dd38-f9b8-4bbf-bda4-736628ecff0e)
+3. Click "Sign in with 0Auth" on the login page: ![Screenshot from 2024-12-16 15-40-30](https://github.com/user-attachments/assets/3b22779d-39d7-4eba-9bb3-5fbba7b672a4)
 
-4. ![image](https://gist.github.com/user-attachments/assets/9afa074a-0a70-429a-a1bf-9e1e4fda3a08)
+4. Use the following credentials and press `Login` :![Screenshot from 2024-12-16 15-40-42](https://github.com/user-attachments/assets/0663295b-7f7f-4d93-ac0e-a4dc65c8d098)
+   * e-mail: `admin@example.com`
+   * password: `admin`
 
-5. type login `admin@example.com` password `admin`
+5. Go to "Connections" -> "Data Sources" tab (in the left vertical menu), press "add data source" and search for **Altinity plugin for ClickHouse** ![Screenshot from 2024-12-16 15-41-05](https://github.com/user-attachments/assets/fe2ce8d1-ea4a-488b-9cc7-c44c270de5b0)
 
-6. ![image](https://gist.github.com/user-attachments/assets/bf9321e2-9c72-4a23-972c-0b21bea7f75e)
 
-7. Click 'Add new datasource' 
+6. In this view ![Screenshot from 2024-12-16 15-52-02](https://github.com/user-attachments/assets/e2f3ebf9-c88b-460d-934c-f1bf045d511b)
+   * Enter URL `http://clickhouse:8123`
+   * Toggle "Forward OAuth Identity" switch
 
-8. Filter by name: type Altinity
+7. Click "Save & Test" at the bottom of this page: ![Screenshot from 2024-12-16 15-54-48](https://github.com/user-attachments/assets/b6612aab-a632-4097-b43c-55188a6a73be)
 
-9. URL: `http://clickhouse:8123`
-10. Forward OAuth Identity: 'enable' 
-11. 'Save & test'
+8. Go to "Explore" tab: ![Screenshot from 2024-12-16 15-56-05](https://github.com/user-attachments/assets/ddf1fbe4-3341-41df-b935-00cc064ffb74)
+
+9. In this view: ![Screenshot from 2024-12-16 15-57-17](https://github.com/user-attachments/assets/5fbeac22-8a20-432e-b779-b07c459bf15e)
+    * Switch to "SQL Editor" mode
+    * Switch "Format As" to "table"
+    * Enter the query: `select currentUser()`
+    * Press "Run Query", the username shall be `ChFhZG1pbkBleGFtcGxlLmNvbRIFbG9jYWw` 
